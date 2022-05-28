@@ -48,7 +48,7 @@ const Home: NextPage = () => {
       document.removeEventListener('keydown', handleKeydown);
       document.removeEventListener('keyup', handleKeyup);
     };
-  }, [currentTime, currentMode]);
+  }, [currentMode]);
 
   return (
     <>
