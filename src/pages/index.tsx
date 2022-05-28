@@ -10,7 +10,7 @@ const Home: NextPage = () => {
   const [currentTime, setCurrentTime] = useState(0);
   const [currentMode, setCurrentMode] = useState(Modes.stopped);
 
-  const hello = trpc.useQuery(['hello', { text: 'client' }]);
+  const addTimeMutation = trpc.useMutation('addTime');
 
   useEffect(() => {
     const handleKeydown = (e: KeyboardEvent) => {
@@ -38,6 +38,8 @@ const Home: NextPage = () => {
           }
           case Modes.stopping: {
             setCurrentMode(Modes.stopped);
+            addTimeMutation.mutate({ time: currentTime });
+
             break;
           }
         }
@@ -51,13 +53,11 @@ const Home: NextPage = () => {
       document.removeEventListener('keydown', handleKeydown);
       document.removeEventListener('keyup', handleKeyup);
     };
-  }, [currentMode]);
+  }, [currentMode, addTimeMutation, currentTime]);
 
   return (
     <>
-      <div className="pt-4 text-xl text-center">{`${
-        hello.isLoading ? 'loading' : hello.data?.greeting
-      } Cubeintime`}</div>
+      <div className="pt-4 text-xl text-center">Cubeintime</div>
 
       <div className="flex justify-center pt-4">
         <MemoizedTimerText

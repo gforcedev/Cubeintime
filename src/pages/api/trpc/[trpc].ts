@@ -1,17 +1,19 @@
+import { PrismaClient } from '@prisma/client';
 import * as trpc from '@trpc/server';
 import * as trpcNext from '@trpc/server/adapters/next';
 import { z } from 'zod';
 
-export const appRouter = trpc.router().query('hello', {
-  input: z
-    .object({
-      text: z.string().nullish(),
-    })
-    .nullish(),
-  resolve({ input }) {
-    return {
-      greeting: `hello ${input?.text ?? 'world'}`,
-    };
+const prisma = new PrismaClient();
+
+export const appRouter = trpc.router().mutation('addTime', {
+  input: z.object({ time: z.number() }),
+  async resolve({ input }) {
+    console.log('resolving');
+    await prisma.time.create({
+      data: {
+        time: input.time,
+      },
+    });
   },
 });
 
