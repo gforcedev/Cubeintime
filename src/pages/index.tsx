@@ -1,5 +1,6 @@
 import TimerText from '@/components/timer';
 import { Modes } from '@/utils/timerTypes';
+import { trpc } from '@/utils/trpc';
 import type { NextPage } from 'next';
 import { memo, useEffect, useState } from 'react';
 
@@ -8,6 +9,8 @@ const MemoizedTimerText = memo(TimerText);
 const Home: NextPage = () => {
   const [currentTime, setCurrentTime] = useState(0);
   const [currentMode, setCurrentMode] = useState(Modes.stopped);
+
+  const hello = trpc.useQuery(['hello', { text: 'client' }]);
 
   useEffect(() => {
     const handleKeydown = (e: KeyboardEvent) => {
@@ -52,7 +55,9 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <div className="pt-4 text-xl text-center">Cubeintime</div>
+      <div className="pt-4 text-xl text-center">{`${
+        hello.isLoading ? 'loading' : hello.data?.greeting
+      } Cubeintime`}</div>
 
       <div className="flex justify-center pt-4">
         <MemoizedTimerText

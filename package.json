@@ -10,9 +10,15 @@
   },
   "dependencies": {
     "@prisma/client": "^3.14.0",
+    "@trpc/client": "^9.23.6",
+    "@trpc/next": "^9.23.6",
+    "@trpc/react": "^9.23.6",
+    "@trpc/server": "^9.23.6",
     "next": "12.1.6",
     "react": "18.1.0",
-    "react-dom": "18.1.0"
+    "react-dom": "18.1.0",
+    "react-query": "^3.39.0",
+    "zod": "^3.17.3"
   },
   "devDependencies": {
     "@types/node": "17.0.35",
