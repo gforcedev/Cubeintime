@@ -1,4 +1,5 @@
 import { Modes } from '@/utils/timerTypes';
+import { useEffect, useState } from 'react';
 
 const modeColors = {
   [Modes.ready]: 'text-green-600',
@@ -7,10 +8,23 @@ const modeColors = {
   [Modes.stopped]: '',
 };
 
-const TimerText: React.FC<{ currentTime: number; currentMode: Modes }> = ({
-  currentTime,
-  currentMode,
-}) => {
+const TimerText: React.FC<{
+  currentTime: number;
+  currentMode: Modes;
+  setCurrentTime: (n: number) => void;
+}> = ({ currentTime, currentMode, setCurrentTime }) => {
+  const [lastTick, setLastTick] = useState(Date.now());
+
+  useEffect(() => {
+    setTimeout(() => {
+      const rightNow = Date.now();
+      if (currentMode === Modes.running) {
+        setCurrentTime(currentTime + (rightNow - lastTick));
+      }
+      setLastTick(rightNow);
+    }, 10);
+  });
+
   return (
     <div
       className={`

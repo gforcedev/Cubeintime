@@ -1,12 +1,13 @@
 import TimerText from '@/components/timer';
 import { Modes } from '@/utils/timerTypes';
 import type { NextPage } from 'next';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
+
+const MemoizedTimerText = memo(TimerText);
 
 const Home: NextPage = () => {
   const [currentTime, setCurrentTime] = useState(0);
   const [currentMode, setCurrentMode] = useState(Modes.stopped);
-  const [lastTick, setLastTick] = useState(Date.now());
 
   useEffect(() => {
     const handleKeydown = (e: KeyboardEvent) => {
@@ -47,27 +48,18 @@ const Home: NextPage = () => {
       document.removeEventListener('keydown', handleKeydown);
       document.removeEventListener('keyup', handleKeyup);
     };
-  }, [currentTime, currentMode, lastTick]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      const rightNow = Date.now();
-      if (currentMode === Modes.running) {
-        setCurrentTime(currentTime + (rightNow - lastTick));
-      }
-      setLastTick(rightNow);
-    }, 10);
-  });
+  }, [currentTime, currentMode]);
 
   return (
     <>
       <div className="pt-4 text-xl text-center">Cubeintime</div>
 
       <div className="flex justify-center pt-4">
-        <TimerText
+        <MemoizedTimerText
           currentTime={currentTime}
           currentMode={currentMode}
-        ></TimerText>
+          setCurrentTime={setCurrentTime}
+        ></MemoizedTimerText>
       </div>
     </>
   );
