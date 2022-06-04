@@ -21,6 +21,9 @@ export const appRouter = createRouter()
               equals: ctx.session.user.id,
             },
           },
+          orderBy: {
+            createdAt: 'desc',
+          },
         });
       }
 

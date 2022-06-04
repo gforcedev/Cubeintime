@@ -12,7 +12,12 @@ const Home: NextPage = () => {
   const [currentTime, setCurrentTime] = useState(0);
   const [currentMode, setCurrentMode] = useState(Modes.stopped);
 
-  const addTimeMutation = trpc.useMutation('addTime');
+  const trpcContext = trpc.useContext();
+  const addTimeMutation = trpc.useMutation('addTime', {
+    onSuccess: () => {
+      trpcContext.invalidateQueries('getUserTimes');
+    },
+  });
 
   const sessionQuery = trpc.useQuery(['next-auth.getSession']);
   const session = sessionQuery.data;
