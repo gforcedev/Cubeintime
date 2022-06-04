@@ -1,4 +1,5 @@
 import TimerText from '@/components/timer';
+import { signIn, signOut } from 'next-auth/react';
 import { Modes } from '@/utils/timerTypes';
 import { trpc } from '@/utils/trpc';
 import type { NextPage } from 'next';
@@ -12,8 +13,12 @@ const Home: NextPage = () => {
 
   const addTimeMutation = trpc.useMutation('addTime');
 
+  const sessionQuery = trpc.useQuery(['next-auth.getSession']);
+  const session = sessionQuery.data;
+
   useEffect(() => {
     const handleKeydown = (e: KeyboardEvent) => {
+      // console.log(session);
       if (e.key == ' ') {
         switch (currentMode) {
           case Modes.stopped: {
@@ -57,6 +62,32 @@ const Home: NextPage = () => {
 
   return (
     <>
+      <div className="bg-red-700">
+        {' '}
+        {session ? (
+          <>
+            Signed in as {session?.user?.email} <br />
+          </>
+        ) : (
+          <>
+            Not signed in <br />
+          </>
+        )}{' '}
+        <button
+          className="btn"
+          onClick={
+            session
+              ? () => {
+                  signOut();
+                }
+              : () => {
+                  signIn();
+                }
+          }
+        >
+          {session ? 'Sign Out' : 'Sign In'}
+        </button>
+      </div>
       <div className="pt-4 text-xl text-center">Cubeintime</div>
 
       <div className="flex justify-center pt-4">
