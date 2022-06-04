@@ -12,11 +12,14 @@ export const appRouter = createRouter()
   .mutation('addTime', {
     input: z.object({ time: z.number() }),
     async resolve({ input, ctx }) {
-      await ctx.prisma.time.create({
-        data: {
-          time: input.time,
-        },
-      });
+      if (ctx.session?.user.id) {
+        await ctx.prisma.time.create({
+          data: {
+            time: input.time,
+            userId: ctx.session?.user?.id,
+          },
+        });
+      }
     },
   });
 

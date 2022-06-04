@@ -18,7 +18,6 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     const handleKeydown = (e: KeyboardEvent) => {
-      // console.log(session);
       if (e.key == ' ') {
         switch (currentMode) {
           case Modes.stopped: {

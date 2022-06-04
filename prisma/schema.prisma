@@ -17,6 +17,9 @@ model Time {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     time      Int
+
+    user   User   @relation(fields: [userId], references: [id])
+    userId String
 }
 
 model Account {
@@ -54,6 +57,7 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
+    Time          Time[]
 }
 
 model VerificationToken {
