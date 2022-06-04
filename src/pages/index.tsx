@@ -1,4 +1,5 @@
 import TimerText from '@/components/timer';
+import TimeList from '@/components/timeList';
 import { signIn, signOut } from 'next-auth/react';
 import { Modes } from '@/utils/timerTypes';
 import { trpc } from '@/utils/trpc';
@@ -96,6 +97,7 @@ const Home: NextPage = () => {
           setCurrentTime={setCurrentTime}
         ></MemoizedTimerText>
       </div>
+      <TimeList />
     </>
   );
 };
