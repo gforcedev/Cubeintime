@@ -5,17 +5,25 @@ import { Modes } from '@/utils/timerTypes';
 import { trpc } from '@/utils/trpc';
 import type { NextPage } from 'next';
 import { memo, useEffect, useState } from 'react';
+import { randomScrambleForEvent } from 'cubing/scramble';
+import { useQuery, useQueryClient } from 'react-query';
 
 const MemoizedTimerText = memo(TimerText);
 
 const Home: NextPage = () => {
   const [currentTime, setCurrentTime] = useState(0);
   const [currentMode, setCurrentMode] = useState(Modes.stopped);
+  const currentScramble = useQuery('scramble', () => {
+    return randomScrambleForEvent('333');
+  });
+  const scrambleData = currentScramble.data;
 
-  const trpcContext = trpc.useContext();
+  const queryClient = useQueryClient();
+  const trpcQueryClient = trpc.useContext();
   const addTimeMutation = trpc.useMutation('addTime', {
     onSuccess: () => {
-      trpcContext.invalidateQueries('getUserTimes');
+      trpcQueryClient.invalidateQueries('getUserTimes');
+      queryClient.invalidateQueries('scramble');
     },
   });
 
@@ -94,6 +102,9 @@ const Home: NextPage = () => {
         </button>
       </div>
       <div className="pt-4 text-xl text-center">Cubeintime</div>
+      <div className="pt-4 text-l text-center">
+        {scrambleData ? scrambleData.toString() : 'generating scramble...'}
+      </div>
 
       <div className="flex justify-center pt-4">
         <MemoizedTimerText
