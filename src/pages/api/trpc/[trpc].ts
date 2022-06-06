@@ -32,12 +32,13 @@ export const appRouter = createRouter()
     },
   })
   .mutation('addTime', {
-    input: z.object({ time: z.number() }),
+    input: z.object({ time: z.number(), scramble: z.string() }),
     async resolve({ input, ctx }) {
       if (ctx.session?.user.id) {
         await ctx.prisma.time.create({
           data: {
             time: input.time,
+            scramble: input.scramble,
             userId: ctx.session?.user?.id,
           },
         });

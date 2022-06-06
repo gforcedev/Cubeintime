@@ -7,6 +7,7 @@ import type { NextPage } from 'next';
 import { memo, useEffect, useState } from 'react';
 import { randomScrambleForEvent } from 'cubing/scramble';
 import { useQuery, useQueryClient } from 'react-query';
+import Link from 'next/link';
 
 const MemoizedTimerText = memo(TimerText);
 
@@ -56,8 +57,12 @@ const Home: NextPage = () => {
           }
           case Modes.stopping: {
             setCurrentMode(Modes.stopped);
-            addTimeMutation.mutate({ time: currentTime });
-
+            if (scrambleData) {
+              addTimeMutation.mutate({
+                time: currentTime,
+                scramble: scrambleData?.toString(),
+              });
+            }
             break;
           }
         }
@@ -71,7 +76,7 @@ const Home: NextPage = () => {
       document.removeEventListener('keydown', handleKeydown);
       document.removeEventListener('keyup', handleKeyup);
     };
-  }, [currentMode, addTimeMutation, currentTime]);
+  }, [currentMode, addTimeMutation, currentTime, scrambleData]);
 
   return (
     <>
@@ -114,6 +119,11 @@ const Home: NextPage = () => {
         ></MemoizedTimerText>
       </div>
       <TimeList />
+      <div className="w-full text-xl text-center pb-2">
+        <a href="https://github.com/gforcedev/cubeintime/blob/main/PRIVACY.md">
+          Privacy
+        </a>
+      </div>
     </>
   );
 };
