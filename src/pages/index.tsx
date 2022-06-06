@@ -120,7 +120,7 @@ const Home: NextPage = () => {
       </div>
       <TimeList />
       <div className="w-full text-xl text-center pb-2">
-        <a href="https://github.com/gforcedev/cubeintime/blob/main/PRIVACY.md">
+        <a href="https://github.com/gforcedev/Cubeintime/blob/main/PRIVACY.md">
           Privacy
         </a>
       </div>

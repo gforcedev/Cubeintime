@@ -1,6 +1,6 @@
 import { createContext } from '@/server/context';
 import { createRouter } from '@/server/createRouter';
-import { prisma, Time } from '@prisma/client';
+import { Time } from '@prisma/client';
 import * as trpcNext from '@trpc/server/adapters/next';
 import { z } from 'zod';
 
