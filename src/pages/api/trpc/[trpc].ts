@@ -1,6 +1,6 @@
 import { createContext } from '@/server/context';
 import { createRouter } from '@/server/createRouter';
-import { Time } from '@prisma/client';
+import { Time, Penalty } from '@prisma/client';
 import * as trpcNext from '@trpc/server/adapters/next';
 import { z } from 'zod';
 
@@ -42,6 +42,38 @@ export const appRouter = createRouter()
             userId: ctx.session?.user?.id,
           },
         });
+      }
+    },
+  })
+  .mutation('deleteTime', {
+    input: z.object({ id: z.number() }),
+    async resolve({ input, ctx }) {
+      if (ctx.session?.user.id) {
+        const timeToDelete = await ctx.prisma.time.findFirst({
+          where: { id: { equals: input.id } },
+        });
+        if (timeToDelete?.userId === ctx.session?.user.id) {
+          await ctx.prisma.time.delete({ where: { id: input.id } });
+        }
+      }
+    },
+  })
+  .mutation('penaltyTime', {
+    input: z.object({
+      id: z.number(),
+      penalty: z.nativeEnum(Penalty).nullable(),
+    }),
+    async resolve({ input, ctx }) {
+      if (ctx.session?.user.id) {
+        const timeToDelete = await ctx.prisma.time.findFirst({
+          where: { id: { equals: input.id } },
+        });
+        if (timeToDelete?.userId === ctx.session?.user.id) {
+          await ctx.prisma.time.update({
+            where: { id: input.id },
+            data: { penalty: input.penalty },
+          });
+        }
       }
     },
   });

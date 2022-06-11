@@ -9,6 +9,19 @@ const TimeList = () => {
   const timesQuery = trpc.useQuery(['getUserTimes']);
   const times = timesQuery.data;
 
+  const trpcQueryClient = trpc.useContext();
+
+  const deleteTimeMutation = trpc.useMutation(['deleteTime'], {
+    onSuccess: () => {
+      trpcQueryClient.invalidateQueries('getUserTimes');
+    },
+  });
+  const penaltyTimeMutation = trpc.useMutation(['penaltyTime'], {
+    onSuccess: () => {
+      trpcQueryClient.invalidateQueries('getUserTimes');
+    },
+  });
+
   return (
     <div className="flex justify-center pt-20">
       <div className="w-1/3 m-12 h-64 overflow-scroll">
@@ -16,18 +29,53 @@ const TimeList = () => {
           times.map((t: Time) => {
             return (
               <div
-                className="pt-3 pb-3 bg-purple-600 p-4 m-2 rounded group relative"
+                className="pt-3 pb-3 bg-purple-600 p-4 m-2 rounded group relative overflow-x-hidden"
                 key={t.id}
               >
-                <div className="text-center w-full group-hover:-translate-x-[40%] transition-all">
-                  {milliDisplay(t.time)}
+                <div
+                  className={`text-center w-full group-hover:-translate-x-[40%] transition-all ${
+                    t.penalty === 'DNF' ? 'line-through' : ''
+                  }`}
+                >
+                  {milliDisplay(t.time + (t.penalty === 'PLUSTWO' ? 2000 : 0))}
+                  {t.penalty === 'PLUSTWO' ? '+' : ''}
                 </div>
 
                 {/* This won't work for mobile users */}
                 <div className="absolute pt-1 inset-0 opacity-0 text-center block group-hover:visible group-hover:opacity-100 transition-opacity">
-                  <button className={buttonStyles}>Good</button>
-                  <button className={buttonStyles}>+2</button>
-                  <button className={buttonStyles}>DNF</button>
+                  <button
+                    className={buttonStyles}
+                    onClick={() =>
+                      penaltyTimeMutation.mutate({ id: t.id, penalty: null })
+                    }
+                  >
+                    Good
+                  </button>
+                  <button
+                    className={buttonStyles}
+                    onClick={() =>
+                      penaltyTimeMutation.mutate({
+                        id: t.id,
+                        penalty: 'PLUSTWO',
+                      })
+                    }
+                  >
+                    +2
+                  </button>
+                  <button
+                    className={buttonStyles}
+                    onClick={() =>
+                      penaltyTimeMutation.mutate({ id: t.id, penalty: 'DNF' })
+                    }
+                  >
+                    DNF
+                  </button>
+                  <button
+                    className={buttonStyles}
+                    onClick={() => deleteTimeMutation.mutate({ id: t.id })}
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
             );
