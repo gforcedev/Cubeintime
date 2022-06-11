@@ -23,8 +23,8 @@ const TimeList = () => {
   });
 
   return (
-    <div className="flex justify-center pt-20">
-      <div className="w-1/3 m-12 h-64 overflow-scroll">
+    <div className="flex justify-center">
+      <div className="w-1/3 m-12 mt-0 h-64 overflow-scroll">
         {times &&
           times.map((t: Time) => {
             return (

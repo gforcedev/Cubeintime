@@ -8,6 +8,7 @@ import { memo, useEffect, useState } from 'react';
 import { randomScrambleForEvent } from 'cubing/scramble';
 import { useQuery, useQueryClient } from 'react-query';
 import Link from 'next/link';
+import Stats from '@/components/stats';
 
 const MemoizedTimerText = memo(TimerText);
 
@@ -118,6 +119,8 @@ const Home: NextPage = () => {
           setCurrentTime={setCurrentTime}
         ></MemoizedTimerText>
       </div>
+      <div className="pt-20"></div>
+      <Stats />
       <TimeList />
       <div className="w-full text-xl text-center pb-2">
         <a href="https://github.com/gforcedev/Cubeintime/blob/main/PRIVACY.md">
