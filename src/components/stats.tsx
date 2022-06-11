@@ -6,18 +6,18 @@ const Stats = () => {
   const timesQuery = trpc.useQuery(['getUserTimes']);
   const times = timesQuery.data;
 
-  return (
-    times && (
-      <div className="text-center">
-        {[5, 12, 50]
-          .map((n) => ({ count: n, average: average(times, n) }))
-          .map((a) => (
-            <div className="mx-6 inline" key={a.count}>
-              {`Ao${a.count}: ${a.average ? milliDisplay(a.average) : 'N/A'}`}
-            </div>
-          ))}
-      </div>
-    )
+  return times ? (
+    <div className="text-center">
+      {[5, 12, 50]
+        .map((n) => ({ count: n, average: average(times, n) }))
+        .map((a) => (
+          <div className="mx-6 inline" key={a.count}>
+            {`Ao${a.count}: ${a.average ? milliDisplay(a.average) : 'N/A'}`}
+          </div>
+        ))}
+    </div>
+  ) : (
+    <></>
   );
 };
 
