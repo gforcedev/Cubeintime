@@ -12,11 +12,63 @@ const TimeList = () => {
   const trpcQueryClient = trpc.useContext();
 
   const deleteTimeMutation = trpc.useMutation(['deleteTime'], {
+    onMutate: async ({ id }) => {
+      // Cancel existing updates so that our optimistic update doesn't get overwritten
+      await trpcQueryClient.cancelQuery(['getUserTimes']);
+
+      // Check data exists to keep typescript happy
+      let data = trpcQueryClient.getQueryData(['getUserTimes']);
+      if (data) {
+        trpcQueryClient.setQueryData(
+          ['getUserTimes'],
+          data.filter((t) => t.id !== id)
+        );
+
+        return { oldTimeList: data };
+      }
+
+      return null;
+    },
+    onError: (_, __, c) => {
+      // Again, assert type of the context for typescript
+      if (c) {
+        let context = c as { oldTimeList: Time[] };
+        trpcQueryClient.setQueryData(['getUserTimes'], context.oldTimeList);
+      }
+    },
     onSuccess: () => {
       trpcQueryClient.invalidateQueries('getUserTimes');
     },
   });
+
   const penaltyTimeMutation = trpc.useMutation(['penaltyTime'], {
+    onMutate: async ({ id, penalty }) => {
+      // Cancel existing updates so that our optimistic update doesn't get overwritten
+      await trpcQueryClient.cancelQuery(['getUserTimes']);
+
+      // Check data exists to keep typescript happy
+      let data = trpcQueryClient.getQueryData(['getUserTimes']);
+      if (data) {
+        trpcQueryClient.setQueryData(
+          ['getUserTimes'],
+          data.map((t) => ({
+            ...t,
+            penalty: t.id === id ? penalty : t.penalty,
+          }))
+        );
+
+        return { oldTimeList: data };
+      }
+
+      return null;
+    },
+    onError: (_, __, c) => {
+      // Again, assert type of the context for typescript
+      if (c) {
+        let context = c as { oldTimeList: Time[] };
+        trpcQueryClient.setQueryData(['getUserTimes'], context.oldTimeList);
+      }
+    },
     onSuccess: () => {
       trpcQueryClient.invalidateQueries('getUserTimes');
     },

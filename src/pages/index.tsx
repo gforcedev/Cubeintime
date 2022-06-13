@@ -9,6 +9,7 @@ import { randomScrambleForEvent } from 'cubing/scramble';
 import { useQuery, useQueryClient } from 'react-query';
 import Link from 'next/link';
 import Stats from '@/components/stats';
+import { Time } from '@prisma/client';
 
 const MemoizedTimerText = memo(TimerText);
 
@@ -23,6 +24,37 @@ const Home: NextPage = () => {
   const queryClient = useQueryClient();
   const trpcQueryClient = trpc.useContext();
   const addTimeMutation = trpc.useMutation('addTime', {
+    onMutate: async (vars) => {
+      // Cancel existing updates so that our optimistic update doesn't get overwritten
+      await trpcQueryClient.cancelQuery(['getUserTimes']);
+
+      const newTime: Time = {
+        ...vars,
+        id: -1, // Can't cnflict
+        penalty: null,
+        // These all don't really matter
+        userId: '',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
+      // Check data exists to keep typescript happy
+      let data = trpcQueryClient.getQueryData(['getUserTimes']);
+      if (data) {
+        trpcQueryClient.setQueryData(['getUserTimes'], [newTime, ...data]);
+
+        return { oldTimeList: data };
+      }
+
+      return null;
+    },
+    onError: (_, __, c) => {
+      // Again, assert type of the context for typescript
+      if (c) {
+        let context = c as { oldTimeList: Time[] };
+        trpcQueryClient.setQueryData(['getUserTimes'], context.oldTimeList);
+      }
+    },
     onSuccess: () => {
       trpcQueryClient.invalidateQueries('getUserTimes');
       queryClient.invalidateQueries('scramble');
