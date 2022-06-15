@@ -7,7 +7,6 @@ import type { NextPage } from 'next';
 import { memo, useEffect, useState } from 'react';
 import { randomScrambleForEvent } from 'cubing/scramble';
 import { useQuery, useQueryClient } from 'react-query';
-import Link from 'next/link';
 import Stats from '@/components/stats';
 import { Time } from '@prisma/client';
 
@@ -125,7 +124,6 @@ const Home: NextPage = () => {
           </>
         )}{' '}
         <button
-          className="btn"
           onClick={
             session
               ? () => {
@@ -139,8 +137,8 @@ const Home: NextPage = () => {
           {session ? 'Sign Out' : 'Sign In'}
         </button>
       </div>
-      <div className="pt-4 text-xl text-center">Cubeintime</div>
-      <div className="pt-4 text-l text-center">
+      <div className="pt-4 text-center text-xl">Cubeintime</div>
+      <div className="pt-4 text-center text-lg">
         {scrambleData ? scrambleData.toString() : 'generating scramble...'}
       </div>
 
@@ -154,7 +152,7 @@ const Home: NextPage = () => {
       <div className="pt-20"></div>
       <Stats />
       <TimeList />
-      <div className="w-full text-xl text-center pb-2">
+      <div className="w-full pb-2 text-center text-xl">
         <a href="https://github.com/gforcedev/Cubeintime/blob/main/PRIVACY.md">
           Privacy
         </a>

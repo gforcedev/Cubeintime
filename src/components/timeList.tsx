@@ -76,16 +76,16 @@ const TimeList = () => {
 
   return (
     <div className="flex justify-center">
-      <div className="w-1/3 m-12 mt-0 h-64 overflow-scroll">
+      <div className="m-12 mt-0 h-64 w-1/3 overflow-scroll">
         {times &&
           times.map((t: Time) => {
             return (
               <div
-                className="pt-3 pb-3 bg-purple-600 p-4 m-2 rounded group relative overflow-x-hidden"
+                className="group relative m-2 overflow-x-hidden rounded bg-purple-600 p-4 py-3"
                 key={t.id}
               >
                 <div
-                  className={`text-center w-full group-hover:-translate-x-[40%] transition-all ${
+                  className={`w-full text-center transition-all group-hover:-translate-x-[40%] ${
                     t.penalty === 'DNF' ? 'line-through' : ''
                   }`}
                 >
@@ -94,7 +94,7 @@ const TimeList = () => {
                 </div>
 
                 {/* This won't work for mobile users */}
-                <div className="absolute pt-1 inset-0 opacity-0 text-center block group-hover:visible group-hover:opacity-100 transition-opacity">
+                <div className="absolute inset-0 block pt-1 text-center opacity-0 transition-opacity group-hover:visible group-hover:opacity-100">
                   <button
                     className={buttonStyles}
                     onClick={() =>
