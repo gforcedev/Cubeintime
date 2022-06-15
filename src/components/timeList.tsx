@@ -21,7 +21,8 @@ const TimeList = () => {
       if (data) {
         trpcQueryClient.setQueryData(
           ['getUserTimes'],
-          data.filter((t) => t.id !== id)
+          // Set id to -1 while deleting so it's rendered grayed-out
+          data.map((t) => ({ ...t, id: t.id === id ? -1 : t.id }))
         );
 
         return { oldTimeList: data };
@@ -79,6 +80,26 @@ const TimeList = () => {
       <div className="m-12 mt-0 h-64 w-1/3 overflow-scroll">
         {times &&
           times.map((t: Time) => {
+            // For times which are being added or deleted, gray them out until
+            // we get confirmation from the db that they were persisted
+            if (t.id === -1)
+              return (
+                <div
+                  className="group relative m-2 overflow-x-hidden rounded bg-gray-500 p-4 py-3"
+                  key={t.id}
+                >
+                  <div
+                    className={`w-full text-center transition-all group-hover:-translate-x-[40%] ${
+                      t.penalty === 'DNF' ? 'line-through' : ''
+                    }`}
+                  >
+                    {milliDisplay(
+                      t.time + (t.penalty === 'PLUSTWO' ? 2000 : 0)
+                    )}
+                    {t.penalty === 'PLUSTWO' ? '+' : ''}
+                  </div>
+                </div>
+              );
             return (
               <div
                 className="group relative m-2 overflow-x-hidden rounded bg-purple-600 p-4 py-3"
