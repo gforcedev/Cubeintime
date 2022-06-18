@@ -1,34 +1,87 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# zART-Stack 🤯
 
-## Getting Started
+> **Z**ero-**A**PI, **R**eact, & **T**ypeScript
 
-First, run the development server:
+**⚡️ Probably the fastest way to build a React Native app with your own backend ⚡️**
+
+## Introduction
+
+A monorepo containing:
+
+- Next.js web app
+- React Native app with Expo
+- A [tRPC](https://trpc.io)-API which is inferred straight into the above.
+- [Prisma](http://prisma.io/) as a typesafe ORM
+
+> In tRPC you simply write API-functions that are automatically inferred straight into your frontend - no matter if it's React, React Native, or something else _(that is TS/JS-based)_.
+
+### Video
+
+> Very rough video recorded in 2 minutes 😅
+
+[![ZART](http://img.youtube.com/vi/dLLm6hgMhMQ/0.jpg)](http://www.youtube.com/watch?v=dLLm6hgMhMQ "Video Title")
+
+## Requirements
+
+You will need docker compose to run the postgres database.
+It comes with the [Docker Desktop App](https://docs.docker.com/get-docker/)
+
+## Getting started
 
 ```bash
-npm run dev
-# or
+git clone git@github.com:KATT/zart.git
+cd zart
+yarn
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+> Press `i` after `yarn dev` in to launch the iOS Simulator.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+Now - head over to one of the [`./apps`](./apps), whilist updating [a router in tRPC](./packages/api/src/routers) or the [Database Schema](./prisma/schema.prisma) and see that the data is directly inferred.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+## Available commands
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+| Command               | Description                                                                                    |
+| --------------------- | ---------------------------------------------------------------------------------------------- |
+| `yarn dev`            | Starts Postgres, Expo & Next.js                                                                |
+| `yarn db-up`          | Starts Postgres on port `5466`                                                                 |
+| `yarn db-migrate-dev` | Runs the latest Database migrations after updating the [Prisma schema](./prisma/schema.prisma) |
+| `yarn db-nuke`        | Stops and deletes the the database                                                             |
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+## Folder structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```graphql
+.
+├── apps
+│   ├── expo    # Expo/RN application
+│   └── nextjs  # Server-side rendered Next.js application
+├── packages
+│   ├── api           # tRPC API 
+│   ├── react         # Shared React-helpers
+│   └── react-native  # RN components. **Could** be shared between Expo & Next.js if you're in to that sort of thing.
+└── prisma      # Prisma setup
+```
 
-## Deploy on Vercel
+## Further reading
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Deployment
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+#### Vercel
+
+- Create a Postgres Database
+- Set env `DATABASE_URL` pointing towards that db
+- Configure *"Root Directory"* as `apps/nextjs` and tick _Include source files outside of the Root Directory in the Build Step_.
+
+
+### Questions?
+
+Shoot me a message [on Twitter](https://twitter.com/alexdotjs)!
+
+
+## Credits
+
+- tRPC and this example is made by [@alexdotjs](https://twitter.com/alexdotjs)
+- `apps/expo` is basically a copy-paste from [`expo-next-monorepo-example`](https://github.com/axeldelafosse/expo-next-monorepo-example) by [axeldelafosse](https://github.com/axeldelafosse).
+

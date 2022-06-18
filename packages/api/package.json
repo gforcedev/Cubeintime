@@ -1,0 +1,17 @@
+{
+  "name": "@zart/api",
+  "version": "0.0.1",
+  "author": "KATT",
+  "license": "MIT",
+  "private": true,
+  "files": [
+    "src"
+  ],
+  "scripts": {},
+  "dependencies": {
+    "@next-auth/prisma-adapter": "^1.0.3",
+    "next-auth": "^4.5.0",
+    "zod": "^3.17.3"
+  },
+  "devDependencies": {}
+}
