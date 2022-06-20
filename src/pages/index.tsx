@@ -56,7 +56,6 @@ const Home: NextPage = () => {
     },
     onSuccess: () => {
       trpcQueryClient.invalidateQueries('getUserTimes');
-      queryClient.invalidateQueries('scramble');
     },
   });
 
@@ -81,7 +80,7 @@ const Home: NextPage = () => {
     };
 
     const handleKeyup = (e: KeyboardEvent) => {
-      if (e.key == ' ') {
+      if (e.key == ' ' || currentMode === Modes.running) {
         switch (currentMode) {
           case Modes.ready: {
             setCurrentMode(Modes.running);
@@ -94,6 +93,7 @@ const Home: NextPage = () => {
                 time: currentTime,
                 scramble: scrambleData?.toString(),
               });
+              queryClient.invalidateQueries('scramble');
             }
             break;
           }
