@@ -142,6 +142,8 @@ const Home: NextPage = () => {
         {scrambleData ? scrambleData.toString() : 'generating scramble...'}
       </div>
 
+      <div></div>
+
       <div className="flex justify-center pt-4">
         <MemoizedTimerText
           currentTime={currentTime}

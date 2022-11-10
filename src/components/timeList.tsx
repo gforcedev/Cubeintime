@@ -77,7 +77,7 @@ const TimeList = () => {
 
   return (
     <div className="flex justify-center">
-      <div className="m-12 mt-0 h-64 w-1/3 overflow-scroll">
+      <div className="p-1 m-12 mt-0 h-64 w-1/3 overflow-scroll scrollbar-thin scrollbar-track-purple-800 scrollbar-thumb-purple-600">
         {times &&
           times.map((t: Time) => {
             // For times which are being added or deleted, gray them out until
