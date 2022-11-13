@@ -9,6 +9,7 @@ import { randomScrambleForEvent } from 'cubing/scramble';
 import { useQuery, useQueryClient } from 'react-query';
 import Stats from '@/components/stats';
 import { Time } from '@prisma/client';
+import TimeChart from '@/components/timeChart';
 
 const MemoizedTimerText = memo(TimerText);
 
@@ -108,7 +109,7 @@ const Home: NextPage = () => {
       document.removeEventListener('keydown', handleKeydown);
       document.removeEventListener('keyup', handleKeyup);
     };
-  }, [currentMode, addTimeMutation, currentTime, scrambleData]);
+  }, [currentMode, addTimeMutation, currentTime, scrambleData, queryClient]);
 
   return (
     <>
@@ -142,8 +143,6 @@ const Home: NextPage = () => {
         {scrambleData ? scrambleData.toString() : 'generating scramble...'}
       </div>
 
-      <div></div>
-
       <div className="flex justify-center pt-4">
         <MemoizedTimerText
           currentTime={currentTime}
@@ -152,8 +151,11 @@ const Home: NextPage = () => {
         ></MemoizedTimerText>
       </div>
       <div className="pt-20"></div>
+      <div className="flex grow justify-center">
+        <TimeList />
+        <TimeChart />
+      </div>
       <Stats />
-      <TimeList />
       <div className="w-full pb-2 text-center text-xl">
         <a href="https://github.com/gforcedev/Cubeintime/blob/main/PRIVACY.md">
           Privacy

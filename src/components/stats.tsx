@@ -7,11 +7,11 @@ const Stats = () => {
   const times = timesQuery.data;
 
   return times ? (
-    <div className="text-center">
+    <div className="mb-10 flex w-full">
       {[5, 12, 50]
         .map((n) => ({ count: n, average: average(times, n) }))
         .map((a) => (
-          <div className="mx-6 inline" key={a.count}>
+          <div className="grow px-48 text-center" key={a.count}>
             {`Ao${a.count}: ${a.average ? milliDisplay(a.average) : 'N/A'}`}
           </div>
         ))}

@@ -76,8 +76,9 @@ const TimeList = () => {
   });
 
   return (
-    <div className="flex justify-center">
-      <div className="p-1 m-12 mt-0 h-64 w-1/3 overflow-scroll scrollbar-thin scrollbar-track-purple-800 scrollbar-thumb-purple-600">
+    <div className="flex w-[50%] justify-center">
+      {/* eslint-disable-next-line tailwindcss/no-custom-classname,tailwindcss/classnames-order */}
+      <div className="m-12 mt-0 h-64 w-full overflow-scroll p-1 scrollbar-thin scrollbar-track-purple-800 scrollbar-thumb-purple-600">
         {times &&
           times.map((t: Time) => {
             // For times which are being added or deleted, gray them out until
@@ -85,6 +86,7 @@ const TimeList = () => {
             if (t.id === -1)
               return (
                 <div
+                  // eslint-disable-next-line tailwindcss/no-custom-classname,tailwindcss/classnames-order
                   className="group relative m-2 overflow-x-hidden rounded bg-gray-500 p-4 py-3"
                   key={t.id}
                 >
@@ -102,6 +104,7 @@ const TimeList = () => {
               );
             return (
               <div
+                // eslint-disable-next-line tailwindcss/no-custom-classname,tailwindcss/classnames-order
                 className="group relative m-2 overflow-x-hidden rounded bg-purple-600 p-4 py-3"
                 key={t.id}
               >
